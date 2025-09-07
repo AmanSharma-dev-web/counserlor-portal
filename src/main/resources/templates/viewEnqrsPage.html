@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>View Enquiries</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container">
+		<ul class="nav">
+			<li class="nav-item">
+				<a class="nav-link active" href="dashboard">View Dashboard</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" href="enquiry">Add Enquiry</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="view-enquiries">View Enquiry</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="logout">Logout</a>
+			</li>
+		</ul>
+		<hr>
+		<h1>View Enquiries</h1>
+
+		<!-- Filter Form -->
+		<form th:action="@{/filter-enqrs}" th:object="${viewEnquiryFilterResponse}" method="post">
+			<table>
+				<tr>
+					<td>
+						Class Mode: 
+						<select th:field="*{classMode}">
+							<option value="">-Select-</option>
+							<option value="Online">Online</option>
+							<option value="Classroom">Classroom</option>
+						</select>
+					</td>
+					<td>
+						Course Name: 
+						<select th:field="*{courseName}">
+							<option value="">-Select-</option>
+							<option value="Java">Java</option>
+							<option value="Python">Python</option>
+							<option value="DevOps">DevOps</option>
+							<option value="AWS">AWS</option>
+						</select>
+					</td>
+					<td>
+						Status: 
+						<select th:field="*{enquiryStatus}">
+							<option value="">-Select-</option>
+							<option value="Open">Open</option>
+							<option value="Enrolled">Enrolled</option>
+							<option value="Lost">Lost</option>
+						</select>
+					</td>
+					<td>
+						<input type="submit" value="Search" class="btn btn-primary">
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<!-- Enquiries Table -->
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-hover">
+				<thead class="table-dark">
+					<tr>
+						<th>S.No.</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+						<th>Mode</th>
+						<th>Course</th>
+						<th>Status</th>
+						<th>Edit</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<!-- Dynamic rows -->
+					<tr th:each="enq, stat : ${enquiries}">
+						<td th:text="${stat.index + 1}"></td>
+						<td th:text="${enq.name}"></td>
+						<td th:text="${enq.email}"></td>
+						<td th:text="${enq.phone}"></td>
+						<td th:text="${enq.classMode}"></td>
+						<td th:text="${enq.courseName}"></td>
+						<td th:text="${enq.enquiryStatus}"></td>
+						<td><a th:href="@{'/editEnq?enqId='+${enq.enquiry_id}}" class="text-primary">Edit</a></td>
+					</tr>
+					<tr th:if="${enquiries == null or enquiries.empty}">
+						<td colspan="8" class="text-center">No records found</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
